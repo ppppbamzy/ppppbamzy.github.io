@@ -11,4 +11,6 @@ git pull
     echo "</a> <br>"
     echo
 } >> lists.html
+git add lists.html
+git commit -m "add links"
 git push
