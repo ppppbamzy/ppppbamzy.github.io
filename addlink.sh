@@ -11,3 +11,4 @@ git pull
     echo "</a> <br>"
     echo
 } >> lists.html
+git push
