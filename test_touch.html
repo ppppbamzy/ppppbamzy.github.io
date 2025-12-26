@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>移动端交互测试</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      touch-action: none; /* 防止触摸时页面滚动 */
+      background-color: #f5f5f5;
+    }
+
+    #topButton {
+      width: 90%;
+      height: 60px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 90%;
+      height: 60px;
+      margin: 40px 0;
+      background-color: #ddd;
+      border-radius: 30px;
+      overflow: hidden;
+    }
+
+    #slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 60px;
+      height: 60px;
+      background-color: #2196F3;
+      border-radius: 50%;
+      cursor: grab;
+      transition: transform 0.1s ease-out; /* 快速复位 */
+      transform: translateX(0);
+    }
+
+    #slider.dragging {
+      transition: none; /* 拖动时无过渡 */
+    }
+
+    .counter {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部按钮 -->
+  <button id="topButton">点击我</button>
+
+  <!-- 滑块容器 -->
+  <div class="slider-container" id="sliderContainer">
+    <div id="slider"></div>
+  </div>
+
+  <!-- 计数器 -->
+  <div class="counter">
+    <p>按钮点击次数: <span id="buttonCount">0</span></p>
+    <p>滑块拖动次数: <span id="sliderCount">0</span></p>
+  </div>
+
+  <script>
+    // 初始化计数器
+    let buttonCount = 0;
+    let sliderCount = 0;
+
+    const topButton = document.getElementById('topButton');
+    const slider = document.getElementById('slider');
+    const sliderContainer = document.getElementById('sliderContainer');
+    const buttonCounter = document.getElementById('buttonCount');
+    const sliderCounter = document.getElementById('sliderCount');
+
+    // 按钮点击事件
+    topButton.addEventListener('click', () => {
+      buttonCount++;
+      buttonCounter.textContent = buttonCount;
+    });
+
+    // 滑块拖动逻辑
+    let isDragging = false;
+    let startX, currentX;
+
+    slider.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      isDragging = true;
+      slider.classList.add('dragging');
+      startX = e.touches[0].clientX - slider.getBoundingClientRect().left;
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const touchX = e.touches[0].clientX;
+      const containerRect = sliderContainer.getBoundingClientRect();
+      const containerLeft = containerRect.left;
+      const containerWidth = containerRect.width;
+      const sliderWidth = slider.offsetWidth;
+
+      // 计算最大可移动距离
+      const maxX = containerWidth - sliderWidth;
+      let dx = touchX - containerLeft - startX;
+
+      // 限制滑块在容器内
+      dx = Math.max(0, Math.min(maxX, dx));
+      currentX = dx;
+
+      slider.style.transform = `translateX(${dx}px)`;
+    });
+
+    document.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      slider.classList.remove('dragging');
+
+      // 触发一次滑块拖动计数
+      sliderCount++;
+      sliderCounter.textContent = sliderCount;
+
+      // 快速复位
+      slider.style.transition = 'transform 0.1s ease-out';
+      slider.style.transform = 'translateX(0)';
+    });
+
+    // 防止鼠标事件干扰（可选）
+    slider.addEventListener('mousedown', (e) => e.preventDefault());
+  </script>
+
+</body>
+</html>
