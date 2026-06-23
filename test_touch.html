@@ -8,45 +8,61 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
+      padding: 0;
+      position: relative;
+      min-height: 100dvh;
+      overflow: hidden;
       touch-action: none; /* 防止触摸时页面滚动 */
       background-color: #f5f5f5;
     }
 
     #topButton {
-      width: 90%;
-      height: 60px;
-      background-color: #4CAF50;
-      color: white;
+      position: fixed;
+      /*
+        template.png: 1170x2532; button bbox: x=97, y=935, w=976, h=122.
+        chrome.png: browser UI leaves the page viewport at y=293..2298.
+      */
+      left: 8.2906vw;
+      top: 32.0200dvh;
+      width: 83.4188vw;
+      height: 10.4274vw;
+      background-color: #07428c;
+      color: rgba(255, 255, 255, 0.76);
       border: none;
-      border-radius: 12px;
-      font-size: 18px;
-      margin-top: 20px;
+      border-radius: 999px;
+      font-size: clamp(18px, 4.4vw, 24px);
       cursor: pointer;
+      line-height: 1;
     }
 
     .slider-container {
-      position: relative;
-      width: 90%;
-      height: 60px;
-      margin: 40px 0;
-      background-color: #ddd;
-      border-radius: 30px;
+      position: fixed;
+      /*
+        template.png: slider bbox: x=188, y=1320, w=798, h=166.
+        chrome.png: browser UI leaves the page viewport at y=293..2298.
+      */
+      left: 16.0684vw;
+      top: 51.2219dvh;
+      width: 68.2051vw;
+      height: 14.1880vw;
+      margin: 0;
+      background-color: #d8d8d8;
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
     }
 
     #slider {
       position: absolute;
       left: 0;
       top: 0;
-      width: 60px;
-      height: 60px;
-      background-color: #2196F3;
-      border-radius: 50%;
+      z-index: 1;
+      /* template.png: slider thumb bbox: w=166, h=166 */
+      width: 14.1880vw;
+      height: 100%;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
       cursor: grab;
       transition: transform 0.1s ease-out; /* 快速复位 */
       transform: translateX(0);
@@ -57,8 +73,13 @@
     }
 
     .counter {
-      margin-top: 30px;
-      font-size: 18px;
+      position: fixed;
+      left: 50%;
+      bottom: 6dvh;
+      width: 86vw;
+      transform: translateX(-50%);
+      font-size: 16px;
+      text-align: center;
       color: #333;
     }
   </style>
